@@ -1,73 +1,91 @@
+// StatusController.java
 import java.util.Scanner;
 
 public class StatusController implements Runnable {
-    InstrumentController controller = new InstrumentController();
-    Scanner scanner = new Scanner(System.in);
-    String command = "";
-    String instrument;
+    private final InstrumentController controller;
+    private final Scanner scanner = new Scanner(System.in);
+
+    public StatusController(InstrumentController controller) {
+        this.controller = controller;
+    }
 
     @Override
-    public void run(){
-        while (!command.equals("exit")){
-            try {
+    public void run() {
+        String command = "";
+        while (!command.equals("exit")) {
+            // 1. LIMPA E EXIBE O STATUS
+            clearConsole();
+            displayStatus();
 
+            // 2. PEDE O INPUT
+            System.out.println("Comandos: play <nome>, pause <nome>, bpm <nome> <valor>, add <nome> <bpm>, exit");
+            System.out.print("DJ > ");
 
-                clean();
+            String line = scanner.nextLine();
+            String[] parts = line.trim().split(" ");
+            if (parts.length == 0 || parts[0].isEmpty()) continue;
 
-                status();
-
-                System.out.println("-----------");
-                System.out.print("DJ > ");
-
-                String[] input = scanner.nextLine().split(" ");
-
-                if (input.length == 2){
-                    command = input[0];
-                    instrument = input[1];
-                } else {
-                    System.out.println("Comando Inválido. Tente 'play/pause instrumento' ");
-                    continue;
-                }
-
-
-                switch (command) {
-                    case "play":
-                        controller.play(instrument);
-                        break;
-
-                    case "pause":
-                        controller.pause(instrument);
-                        break;
-
-                    case "exit":
-                        break;
-
-                    default:
-                        System.out.println("-----------");
-                        System.out.println("Comando Inválido. Tente 'play/pause instrumento' ");
-                }
-
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
+            command = parts[0].toLowerCase();
+            
+            // 3. PROCESSA O COMANDO
+            processCommand(command, parts);
         }
 
+        controller.stopAll();
         scanner.close();
+        System.out.println("Mesa de DJ desligada.");
     }
 
-    private void status(){
-        clean();
+    private void displayStatus() {
+        System.out.println("--- MESA DE DJ ---");
+        for (Instrument instrument : controller.getInstruments().values()) {
+            String status = instrument.isPlaying() ? "TOCANDO :) " : "PAUSADO ||";
+            System.out.println(instrument.getName() + ": " + status + "BPM: " + instrument.getBpm());
+        }
+        System.out.println("------------------------------------");
+    }
 
-        System.out.println("--- Instrumentos Tocando ---");
+    private void processCommand(String command, String[] parts) {
+        if (command.equals("exit")) return;
+        
+        if (parts.length < 2) {
+            // Pode adicionar uma mensagem de erro aqui se quiser
+            return;
+        }
+        String instrumentName = parts[1];
 
-        for (Instrument instrument : controller.getInstruments().values()){
-            System.out.println(instrument.getName() + ":" + (instrument.isPlaying() ? "TOCANDO ♪♩" : "PAUSADO || "));
+        switch (command) {
+            case "play":
+                controller.play(instrumentName);
+                break;
+            case "pause":
+                controller.pause(instrumentName);
+                break;
+            case "add":
+                if (parts.length == 3) {
+                    try {
+                        int bpm = Integer.parseInt(parts[2]);
+                        controller.addInstrument(instrumentName, bpm);
+                    } catch (NumberFormatException e) {
+                        // Tratar erro
+                    }
+                }
+                break;
+            case "bpm":
+                if (parts.length == 3) {
+                    try {
+                        int bpm = Integer.parseInt(parts[2]);
+                        controller.setBpm(instrumentName, bpm);
+                    } catch (NumberFormatException e) {
+                        // Tratar erro
+                    }
+                }
+                break;
         }
     }
 
-    private void clean() {
+    private void clearConsole() {
+        // Funciona na maioria dos terminais.
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

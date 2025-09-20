@@ -1,42 +1,65 @@
-import java.util.HashMap;
+// InstrumentController.java
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InstrumentController {
 
-    private Map<String, Instrument> instruments = new HashMap<>();
+    private final Map<String, Instrument> instruments = new ConcurrentHashMap<>();
+    private final Map<String, Thread> instrumentThreads = new ConcurrentHashMap<>();
 
-    public InstrumentController(){
+    public InstrumentController() {
+        addInstrument("guitar", 120);
+        addInstrument("drum", 140);
+        addInstrument("bass", 100);
+    }
 
-        Instrument guitar = new Instrument("guitar", 120);
-        Instrument drum = new Instrument("drum", 120);
-        Instrument bass = new Instrument("bass", 120);
-        Instrument seila = new Instrument("beila", 120);
+    public void startAll() {
+        for (Instrument instrument : instruments.values()) {
+            Thread t = new Thread(instrument);
+            t.start();
+            instrumentThreads.put(instrument.getName(), t);
+        }
+    }
 
-        this.instruments.put(guitar.getName(), guitar);
-        this.instruments.put(drum.getName(), drum);
-        this.instruments.put(bass.getName(), bass);
-        this.instruments.put(seila.getName(), seila);
+    public void stopAll() {
+        for (Instrument instrument : instruments.values()) {
+            instrument.stop();
+        }
+        System.out.println("\nAguardando as faixas finalizarem...");
+    }
+
+    public void addInstrument(String name, int bpm) {
+        if (!instruments.containsKey(name)) {
+            Instrument newInstrument = new Instrument(name, bpm);
+            instruments.put(name, newInstrument);
+            Thread t = new Thread(newInstrument);
+            t.start();
+            instrumentThreads.put(name, t);
+        }
+    }
+
+    public void play(String instrumentName) {
+        Instrument instrument = instruments.get(instrumentName);
+        if (instrument != null) {
+            instrument.setPlaying(true);
+        }
+    }
+
+    public void pause(String instrumentName) {
+        Instrument instrument = instruments.get(instrumentName);
+        if (instrument != null) {
+            instrument.setPlaying(false);
+        }
+    }
+
+    public void setBpm(String instrumentName, int bpm) {
+        Instrument instrument = instruments.get(instrumentName);
+        if (instrument != null) {
+            instrument.setBpm(bpm);
+        }
     }
 
     public Map<String, Instrument> getInstruments() {
         return instruments;
-    }
-
-    public void setInstruments(Map<String, Instrument> instruments) {
-        this.instruments = instruments;
-    }
-
-    public void play(String instrumentName){
-        Instrument instrument = this.instruments.get(instrumentName);
-
-        if (instrument != null)
-            instrument.setPlaying(true);
-    }
-
-    public void pause(String instrumentName){
-        Instrument instrument = this.instruments.get(instrumentName);
-
-        if (instrument != null)
-            instrument.setPlaying(false);
     }
 }
