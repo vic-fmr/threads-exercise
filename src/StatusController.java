@@ -18,8 +18,8 @@ public class StatusController implements Runnable {
             displayStatus();
 
             // 2. PEDE O INPUT
-            System.out.println("Comandos: play <nome>, pause <nome>, bpm <nome> <valor>, add <nome> <bpm>, exit");
-            System.out.print("DJ > ");
+            System.out.println("\nComandos: \nplay <nome> \npause <nome> \nbpm <nome> <valor> \nadd <nome> <bpm>\nexit");
+            System.out.print("\nDJ > ");
 
             String line = scanner.nextLine();
             String[] parts = line.trim().split(" ");
