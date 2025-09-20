@@ -13,12 +13,12 @@ public class StatusController implements Runnable {
     public void run() {
         String command = "";
         while (!command.equals("exit")) {
-            // 1. LIMPA E EXIBE O STATUS
+
             clearConsole();
             displayStatus();
 
-            // 2. PEDE O INPUT
-            System.out.println("\nComandos: \nplay <nome> \npause <nome> \nbpm <nome> <valor> \nadd <nome> <bpm>\nexit");
+
+            System.out.println("\nComandos: \nplay <nome> \npause <nome> \nbpm <nome> <valor>\nexit");
             System.out.print("\nDJ > ");
 
             String line = scanner.nextLine();
@@ -27,7 +27,7 @@ public class StatusController implements Runnable {
 
             command = parts[0].toLowerCase();
             
-            // 3. PROCESSA O COMANDO
+
             processCommand(command, parts);
         }
 
@@ -49,7 +49,7 @@ public class StatusController implements Runnable {
         if (command.equals("exit")) return;
         
         if (parts.length < 2) {
-            // Pode adicionar uma mensagem de erro aqui se quiser
+
             return;
         }
         String instrumentName = parts[1];
@@ -61,23 +61,22 @@ public class StatusController implements Runnable {
             case "pause":
                 controller.pause(instrumentName);
                 break;
-            case "add":
-                if (parts.length == 3) {
-                    try {
-                        int bpm = Integer.parseInt(parts[2]);
-                        controller.addInstrument(instrumentName, bpm);
-                    } catch (NumberFormatException e) {
-                        // Tratar erro
-                    }
-                }
-                break;
+//            case "add":
+//                if (parts.length == 3) {
+//                    try {
+//                        int bpm = Integer.parseInt(parts[2]);
+//                        controller.addInstrument(instrumentName, bpm);
+//                    } catch (NumberFormatException e) {
+//                        // Tratar erro
+//                    }
+//                }
+//                break;
             case "bpm":
                 if (parts.length == 3) {
                     try {
                         int bpm = Integer.parseInt(parts[2]);
                         controller.setBpm(instrumentName, bpm);
                     } catch (NumberFormatException e) {
-                        // Tratar erro
                     }
                 }
                 break;
@@ -85,7 +84,6 @@ public class StatusController implements Runnable {
     }
 
     private void clearConsole() {
-        // Funciona na maioria dos terminais.
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }

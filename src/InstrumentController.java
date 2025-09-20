@@ -8,17 +8,19 @@ public class InstrumentController {
     private final Map<String, Thread> instrumentThreads = new ConcurrentHashMap<>();
 
     public InstrumentController() {
-        addInstrument("guitar", 120);
-        addInstrument("drum", 140);
-        addInstrument("bass", 100);
+        addInstrument("baixo","music/bass.wav", 80);
+        addInstrument("bateria","music/drums.wav", 80);
+        addInstrument("melodia","music/melody.wav", 80);
+        addInstrument("diva", "music/vocal.wav", 80);
     }
 
     public void startAll() {
-        for (Instrument instrument : instruments.values()) {
-            Thread t = new Thread(instrument);
-            t.start();
-            instrumentThreads.put(instrument.getName(), t);
-        }
+            for (Instrument instrument : instruments.values()) {
+                Thread t = new Thread(instrument);
+                t.start();
+                instrumentThreads.put(instrument.getName(), t);
+            }
+
     }
 
     public void stopAll() {
@@ -28,27 +30,30 @@ public class InstrumentController {
         System.out.println("\nAguardando as faixas finalizarem...");
     }
 
-    public void addInstrument(String name, int bpm) {
+    private void addInstrument(String name, String audioPath, int bpm) {
         if (!instruments.containsKey(name)) {
-            Instrument newInstrument = new Instrument(name, bpm);
+            Instrument newInstrument = new Instrument(name, audioPath, bpm);
             instruments.put(name, newInstrument);
-            Thread t = new Thread(newInstrument);
-            t.start();
-            instrumentThreads.put(name, t);
         }
     }
 
     public void play(String instrumentName) {
+
+
         Instrument instrument = instruments.get(instrumentName);
         if (instrument != null) {
-            instrument.setPlaying(true);
+            instrument.play();
+        } else {
+            System.out.println("Instrumento não encontrado.");
         }
     }
 
     public void pause(String instrumentName) {
         Instrument instrument = instruments.get(instrumentName);
         if (instrument != null) {
-            instrument.setPlaying(false);
+            instrument.pause();
+        } else {
+            System.out.println("Instrumento não encontrado.");
         }
     }
 
