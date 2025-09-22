@@ -1,11 +1,3 @@
-Claro, com prazer\! Um bom `README.md` é essencial para qualquer projeto no GitHub. Ele não só explica o que o projeto faz, mas também orienta outros desenvolvedores sobre como usá-lo, compilá-lo e contribuir.
-
-Aqui está um modelo de `README.md` que você pode usar e adaptar para o seu projeto da mesa de DJ. Ele cobre todos os pontos importantes de forma clara e profissional.
-
------
-
-### Título do Projeto
-
 # 🎧 Mesa de DJ em Java
 
 -----
@@ -37,7 +29,7 @@ O projeto foi empacotado em um arquivo `.jar` executável, que contém todas as 
 
 #### Executando a Aplicação
 
-1.  Faça o download do arquivo `DJApp.jar` da pasta [releases](https://www.google.com/search?q=LINK_PARA_SUA_PASTA_DE_RELEASES_OU_DIRETO_DO_ARQUIVO).
+1.  Faça o download do arquivo `DJApp.jar` da pasta releases.
 2.  Abra o terminal ou prompt de comando.
 3.  Navegue até o diretório onde você salvou o arquivo `DJApp.jar`.
 4.  Execute o seguinte comando:
@@ -88,16 +80,13 @@ A estrutura de diretórios do projeto é a seguinte:
 └── README.md
 ```
 
------
+### Equipe
 
-### 📝 Licença
+  * [vic-fmr](https://github.com/vic-fmr)
+  * [camilamta275](https://github.com/camilamta275)
+  * [Sun-cs-Sol](https://github.com/Sun-cs-Sol)
+  * [renysoo](https://github.com/renysoo)
+  * [lucxsz-web](https://github.com/lucxsz-web)
 
-Este projeto está sob a licença MIT. Para mais detalhes, veja o arquivo `LICENSE` (se aplicável).
-
------
-
-### Autor
-
-  * [Seu Nome ou Usuário do GitHub](https://www.google.com/search?q=LINK_PARA_SEU_PERFIL_DO_GITHUB)
 
 -----
